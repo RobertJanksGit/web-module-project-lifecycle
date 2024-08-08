@@ -7,9 +7,12 @@ export default class TodoList extends React.Component {
   }
 
   render() {
+    const filtered = this.props.todos.filter(
+      (todo) => !todo.completed || this.props.showAll
+    );
     return (
       <ul>
-        {this.props.todos.map((todo) => (
+        {filtered.map((todo) => (
           <Todo
             toggleCompletion={this.props.toggleCompletion}
             key={todo.id}

@@ -14,6 +14,7 @@ export default class App extends React.Component {
         name: "",
         completed: false,
       },
+      showAll: true,
     };
   }
   componentDidMount() {
@@ -25,6 +26,13 @@ export default class App extends React.Component {
       .catch((err) => console.error(err));
   }
 
+  toggleShowAll = (evt) => {
+    this.setState({
+      ...this.state,
+      showAll: !this.state.showAll,
+    });
+  };
+
   toggleCompletion = (id) => {
     console.log(id);
     axios
@@ -35,7 +43,6 @@ export default class App extends React.Component {
           todos: prevState.todos.map((todo) =>
             todo.id === id ? response.data.data : todo
           ),
-          addedTodos: { ...prevState.addedTodos },
         }));
       })
       .catch((error) => {
@@ -75,6 +82,7 @@ export default class App extends React.Component {
       <div>
         <h2>Todos:</h2>
         <TodoList
+          showAll={this.state.showAll}
           toggleCompletion={this.toggleCompletion}
           todos={this.state.todos}
         />
@@ -83,7 +91,9 @@ export default class App extends React.Component {
           onChange={this.onChange}
           state={this.state}
         />
-        <button>Hide Completed</button>
+        <button onClick={this.toggleShowAll}>
+          {this.state.showAll ? "Hide Completed" : "Show All"}
+        </button>
       </div>
     );
   }
