@@ -1,34 +1,25 @@
 import React from "react";
 import axios from "axios";
 
+const URL = "http://localhost:9000/api/todos";
+
 export default class Form extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       name: "",
       completed: false,
     };
   }
 
-  onSubmit = (evt) => {
-    evt.preventDefault();
-  };
-
-  onChange = (evt) => {
-    const { value } = evt.target;
-    this.setState({
-      ...this.state,
-      name: value,
-    });
-  };
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.props.onSubmit}>
         <input
           type="text"
           placeholder="type todo"
-          value={this.state.name}
-          onChange={this.onChange}
+          value={this.props.state.addedTodos.name}
+          onChange={this.props.onChange}
         />
         <input type="submit" />
       </form>

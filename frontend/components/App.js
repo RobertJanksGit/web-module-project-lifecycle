@@ -10,6 +10,10 @@ export default class App extends React.Component {
     super();
     this.state = {
       todos: [],
+      addedTodos: {
+        name: "",
+        completed: false,
+      },
     };
   }
   componentDidMount() {
@@ -20,12 +24,44 @@ export default class App extends React.Component {
       })
       .catch((err) => console.error(err));
   }
+
+  onSubmit = (evt) => {
+    evt.preventDefault();
+    if (this.state.addedTodos.name.trim() === "") {
+      return;
+    }
+    axios
+      .post(URL, this.state.addedTodos)
+      .then((response) => {
+        console.log("Todo added", response.data);
+        this.setState({
+          ...this.state,
+          addedTodos: { name: "", completed: false },
+        });
+      })
+      .catch((error) => {
+        console.error("There was an error adding the todo!", error);
+      });
+  };
+
+  onChange = (evt) => {
+    const { value } = evt.target;
+    this.setState({
+      ...this.state,
+      addedTodos: { name: value, completed: false },
+    });
+  };
+
   render() {
     return (
       <div>
         <h2>Todos:</h2>
         <TodoList todos={this.state.todos} />
-        <Form />
+        <Form
+          onSubmit={this.onSubmit}
+          onChange={this.onChange}
+          state={this.state}
+        />
         <button>Hide Completed</button>
       </div>
     );
