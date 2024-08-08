@@ -1,4 +1,5 @@
 import React from "react";
+import Todo from "./Todo";
 
 export default class TodoList extends React.Component {
   constructor(props) {
@@ -9,15 +10,7 @@ export default class TodoList extends React.Component {
     return (
       <ul>
         {this.props.todos.map((todo) => (
-          <li key={todo.id}>
-            <span
-              style={{
-                textDecoration: todo.completed ? "line-through" : "none",
-              }}
-            >
-              {todo.name}
-            </span>
-          </li>
+          <Todo key={todo.id} name={todo.name} completed={todo.completed} />
         ))}
       </ul>
     );
