@@ -5,9 +5,11 @@ export default class Todo extends React.Component {
     super(props);
   }
   render() {
+    const { toggleCompletion } = this.props;
     return (
       <li>
         <span
+          onClick={(evt) => toggleCompletion(this.props.id)}
           style={{
             textDecoration: this.props.completed ? "line-through" : "none",
           }}

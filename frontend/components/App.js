@@ -25,6 +25,24 @@ export default class App extends React.Component {
       .catch((err) => console.error(err));
   }
 
+  toggleCompletion = (id) => {
+    console.log(id);
+    axios
+      .patch(`${URL}/${id}`)
+      .then((response) => {
+        console.log("Todo updated", response.data);
+        this.setState((prevState) => ({
+          todos: prevState.todos.map((todo) =>
+            todo.id === id ? response.data.data : todo
+          ),
+          addedTodos: { ...prevState.addedTodos },
+        }));
+      })
+      .catch((error) => {
+        console.error("There was an error updating the todo!", error);
+      });
+  };
+
   onSubmit = (evt) => {
     evt.preventDefault();
     if (this.state.addedTodos.name.trim() === "") {
@@ -34,10 +52,10 @@ export default class App extends React.Component {
       .post(URL, this.state.addedTodos)
       .then((response) => {
         console.log("Todo added", response.data);
-        this.setState({
-          ...this.state,
+        this.setState((prevState) => ({
+          todos: [...prevState.todos, response.data.data],
           addedTodos: { name: "", completed: false },
-        });
+        }));
       })
       .catch((error) => {
         console.error("There was an error adding the todo!", error);
@@ -56,7 +74,10 @@ export default class App extends React.Component {
     return (
       <div>
         <h2>Todos:</h2>
-        <TodoList todos={this.state.todos} />
+        <TodoList
+          toggleCompletion={this.toggleCompletion}
+          todos={this.state.todos}
+        />
         <Form
           onSubmit={this.onSubmit}
           onChange={this.onChange}
